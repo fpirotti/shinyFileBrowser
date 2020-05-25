@@ -1,0 +1,15 @@
+Package: shinyFileBrowser
+Title: Interface in Shiny to provide a tiny browser with a list of files in a folder linked to show on the browser
+Version: 0.0.0.9000
+Authors@R: person("Francesco", "Pirotti", email = "francesco.pirotti@unipd.it", role = c("aut", "cre"))
+Description: What the package does (one paragraph).
+Depends: R (>= 3.0.1)
+Imports:
+    htmltools,
+    shiny (>= 1.1.0),
+    fs (>= 1.2.6),
+    tibble (>= 1.4.2)
+License: LGPL
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.0

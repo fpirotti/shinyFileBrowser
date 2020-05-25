@@ -1,0 +1,7 @@
+dependencies:
+- name: shinyFileBrowser
+  version: 0.0.95
+  src: www
+  stylesheet:
+    - stylesIcons.css
+    - fileIcons.css
