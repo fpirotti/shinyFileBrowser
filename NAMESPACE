@@ -3,7 +3,6 @@
 export(fileGetter)
 export(rendershinyFileBrowser)
 export(shinyFileBrowser)
-export(shinyFileBrowserExample)
 export(shinyFileBrowserOutput)
 importFrom(fs,dir_ls)
 importFrom(fs,file_access)

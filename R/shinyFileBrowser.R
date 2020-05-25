@@ -13,101 +13,6 @@ getSession <- function() {
 
 
 
-
-#' Shiny bindings for shinyFileBrowser
-#'
-#' Output and render functions for using shinyFileBrowser within Shiny
-#' applications and interactive Rmd documents.
-#'
-#' @param rootDirServer output folder to read from
-#' @param rootDirHtml output html of folder to read from
-#'
-#' @family shinyFiles
-#'
-#' @importFrom shiny observe invalidateLater req observeEvent
-#' @importFrom fs path
-#'
-#' @export
-shinyFileBrowserExample<-function(      rootDirServer = "~/",
-                                        rootDirHtml= "/"){
-
-
-  ui <- bootstrapPage(
-    # example use of the automatically generated output function
-    useShinyjs(),
-    div(id="DropZoneSuccessSelector")
-  )
-  server <- function(input, output, session) {
-
-    #shinyFileChoose(input, 'files', root=c(root=dir2scan), filetypes=c('', 'txt', 'r', '*'))
-
-
-    #
-    #     input[['myShinyFileBrowser']] <- rendershinyFileBrowser({
-    #       shinyFileBrowser(input=input,  "filePanel", dir2scan = dir2scan, updateFreq=0)
-    #     })
-
-    observe({
-
-
-      insertUI(
-        selector = "#DropZoneSuccessSelector",
-        where = "beforeEnd",
-        ui = div(
-          shinyFileBrowserOutput("shinyFileBrowserDiv", height = NULL)  ,
-          fileInput("fileInputSFB", label = NULL, buttonLabel = "Carica", placeholder = NULL, multiple = T)
-        )
-      )
-
-      output$shinyFileBrowserDiv<-rendershinyFileBrowser({
-        shinyFileBrowser(input=input,  "fileInputSFB",
-                         rootDirServer = rootDirServer,
-                         rootDirHtml=rootDirHtml ,
-                         updateFreq=0 )
-      })
-
-      observeEvent(input$shinyFileBrowserFileDeleted, {
-
-        req(input$shinyFileBrowserFileDeleted)
-        print(input$shinyFileBrowserFileDeleted)
-        file2rem<-paste0(rootDirServer, input$shinyFileBrowserFileDeleted)
-        if(!file.exists(file2rem)){
-          warning( sprintf("%s is Not a file!", input$shinyFileBrowserFileDeleted ))
-          return(NULL)
-        }
-        if(is_dir(file2rem)){
-          warning( sprintf("%s is  a directory!", input$shinyFileBrowserFileDeleted ))
-          return(NULL)
-        }
-
-        file.remove(file2rem)
-        dd<-shinyFileBrowser::fileGetter(rootDirServer)
-        session$sendCustomMessage("shinyFileBrowserFileAdded", list(dirContents=dd))
-
-      })
-
-      observeEvent(input$fileInputSFB, {
-        file.copy(input$fileInputSFB$datapath, paste0(rootDirServer, input$fileInputSFB$name) )
-        dd<-shinyFileBrowser::fileGetter(rootDirServer)
-        session$sendCustomMessage("shinyFileBrowserFileAdded", list(dirContents=dd))
-      })
-
-    })
-
-
-
-
-    session$onSessionEnded(function() {
-
-      stopApp()
-    })
-  }
-
-
-  shinyApp(ui = ui, server = server)
-
-
-}
 #' Create a function that returns fileinfo according to the NOT given restrictions
 #'
 #'
@@ -146,25 +51,38 @@ fileGetter<-function(dir2scan=getwd()){
 
 
 
-#' @examples
-#' \dontrun{
-#' # File selections
-#' ui <- shinyUI(bootstrapPage(
-#'   shinyFilesButton('files', 'File select', 'Please select a file', FALSE)
-#' ))
-#' server <- shinyServer(function(input, output) {
-#'   shinyFileChoose(input, 'files', roots=c(wd='.'), filetypes=c('', 'txt'),
-#'                   defaultPath='', defaultRoot='wd')
-#' })
-#'
-#' runApp(list(
-#'   ui=ui,
-#'   server=server
-#' ))
-#' }
+#' Create a function that returns a tiny file browser
 #'
 #'
-#' @family shinyFiles
+#' @family shinyFileBrowser
+#'
+#' @param input A
+#'
+#' @param input A
+#'
+#' @param id A
+#'
+#' @param session The session object of the shinyServer call (usually
+#' `session`).
+#'
+#' @param message A
+#'
+#' @param width A
+#'
+#' @param height A
+#'
+#' @param elementId A
+#'
+#' @param rootDirServer The default relative path specified given the `defaultRoot`.
+#'
+#' @param rootDirHtml The default relative path specified given the `defaultRoot`.
+#'
+#' @param updateFreq The default relative path specified given the `defaultRoot`.
+#'
+#' @param ... Arguments to be passed on to [fileGetter()]
+#'
+#' @return A reactive observer that takes care of the server side logic of the
+#' filesystem connection.
 #'
 #' @importFrom shiny observe invalidateLater req observeEvent
 #' @importFrom fs path
@@ -194,8 +112,6 @@ shinyFileBrowser <- function(input, id, session = getSession(),  message="",
     height = height,
     package = 'shinyFileBrowser'
   )
-
-
 
 
 }
