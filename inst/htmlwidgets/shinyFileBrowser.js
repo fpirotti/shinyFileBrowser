@@ -11,6 +11,7 @@ HTMLWidgets.widget({
     var rootDirHtml="/";
     var thisWindow = el;
     var ellipsized = 0;
+    var elementId;
 
 
     if (HTMLWidgets.shinyMode) {
@@ -29,7 +30,7 @@ HTMLWidgets.widget({
     return {
 
       renderValue: function(data) {
-
+        elementId=data.elementId;
         ellipsized=data.ellipsized;
         rootDirHtml=data.rootDirHtml;
         $(el).children().remove();
@@ -118,7 +119,7 @@ HTMLWidgets.widget({
 
       returnFileElements: function(dFile, linkroot, markerid ){
             var delornot;
-            if( !dFile.isDir ) delornot =$('<div>' ).addClass('sF-filetype-deleteFile').attr('onclick','Shiny.onInputChange("shinyFileBrowserFileDeleted", { markerid:"'+ markerid +'",  dirName:"'+ linkroot +'", fileName:"'+dFile.name+'"})');
+            if( !dFile.isDir ) delornot =$('<div>' ).addClass('sF-filetype-deleteFile').attr('onclick','Shiny.setInputValue("shinyFileBrowserFileDeleted", { markerid:"'+ markerid +'",  dirName:"'+ linkroot +'", fileName:"'+dFile.name+'"},  {priority: "event"})');
             else $('<div>' );
 
             var ellipName=dFile.name;
@@ -201,11 +202,9 @@ HTMLWidgets.widget({
               }
             }
           }
-
-
-
           modal.data('currentData', parsedFiles);
           $(modal).trigger('change');
+          Shiny.setInputValue("shinyFileBrowserRendered", { elementId:elementId }, {priority: "event"});
         }
     };
   }
