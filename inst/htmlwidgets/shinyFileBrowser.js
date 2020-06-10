@@ -10,6 +10,7 @@ HTMLWidgets.widget({
     var initialized = false;
     var rootDirHtml="/";
     var thisWindow = el;
+    var ellipsized = 0;
 
 
     if (HTMLWidgets.shinyMode) {
@@ -29,8 +30,7 @@ HTMLWidgets.widget({
 
       renderValue: function(data) {
 
-        // TODO: code to render the widget, e.g.
-        //el.innerText = x.message + "----" + x.dir;
+        ellipsized=data.ellipsized;
         rootDirHtml=data.rootDirHtml;
         $(el).children().remove();
 
@@ -122,7 +122,7 @@ HTMLWidgets.widget({
             else $('<div>' );
 
             var ellipName=dFile.name;
-            if(dFile.name.length>30) ellipName = ellipName.substring(ellipName,0,30)+"...";
+            if(ellipsized!==0 && dFile.name.length < ellipsized) ellipName = ellipName.substring(ellipName,0,ellipsized)+"...";
 
             return  $('<div>').toggleClass('sF-file', !dFile.isDir).toggleClass('sF-directory', dFile.isDir).append(
                     $('<div>').addClass('sF-file-icon').addClass('sF-filetype-'+dFile.extension)

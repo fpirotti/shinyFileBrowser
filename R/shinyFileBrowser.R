@@ -77,6 +77,8 @@ fileGetter<-function(dir2scan=getwd()){
 #'
 #' @param fileUploader Should upload button be created - default TRUE.
 #'
+#' @param ellipsized Should text be shortened and title added - if 0 is false, otherwise the number of characters.
+#'
 #' @param ... Arguments to be passed on to [fileGetter()]
 #'
 #' @return A reactive observer that takes care of the server side logic of the
@@ -88,7 +90,7 @@ fileGetter<-function(dir2scan=getwd()){
 shinyFileBrowser <- function(input,
                              elementId = paste0("shinyFileBrowser_", as.character( as.integer(Sys.time()) ) ),
                              session = getSession(),
-                             message="",
+                             message="", ellipsized=0,
                              width = 300, height = NULL,
                              rootDirServer=getwd(),
                              rootDirHtml="/",
@@ -104,6 +106,7 @@ shinyFileBrowser <- function(input,
     dirContents = currentDirContents,
     rootDirServer=rootDirServer,
     markerid=markerid,
+    ellipsized=ellipsized,
     rootDirHtml = ifelse( substr(rootDirHtml, nchar(rootDirHtml) , nchar(rootDirHtml) )=="/",
                           rootDirHtml, sprintf("%s/",rootDirHtml ) )
   )
