@@ -121,12 +121,14 @@ HTMLWidgets.widget({
             if( !dFile.isDir ) delornot =$('<div>' ).addClass('sF-filetype-deleteFile').attr('onclick','Shiny.onInputChange("shinyFileBrowserFileDeleted", { markerid:"'+ markerid +'",  dirName:"'+ linkroot +'", fileName:"'+dFile.name+'"})');
             else $('<div>' );
 
+            var ellipName=dFile.name;
+            if(dFile.name.length>30) ellipName = ellipName.substring(ellipName,0,30)+"...";
 
             return  $('<div>').toggleClass('sF-file', !dFile.isDir).toggleClass('sF-directory', dFile.isDir).append(
                     $('<div>').addClass('sF-file-icon').addClass('sF-filetype-'+dFile.extension)
                   ).append(
                     $('<div>').addClass('sF-file-name').append(
-                      $('<a>',  {text: dFile.name}).attr("target","_blank").attr("href", rootDirHtml+dFile.name)
+                      $('<a>',  {text: ellipName }).attr("title",dFile.name).attr("target","_blank").attr("href", rootDirHtml+dFile.name)
                     )
                   ).append(
                     $('<div>', {text: dFile.isDir ? '' : this.formatSize(dFile.size, true)}).addClass('sF-file-size')
