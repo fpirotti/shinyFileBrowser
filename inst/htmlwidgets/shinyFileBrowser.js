@@ -18,6 +18,8 @@ HTMLWidgets.widget({
         if (el) {
           el.populateFileChooser( data, true);
         } else {
+          console.log(data);
+          console.log(el);
           alert('Problema contattare lo sviluppatore');
         }
 
@@ -114,9 +116,9 @@ HTMLWidgets.widget({
 
       },
 
-      returnFileElements: function(dFile, linkroot ){
+      returnFileElements: function(dFile, linkroot, markerid ){
             var delornot;
-            if( !dFile.isDir ) delornot =$('<div>' ).addClass('sF-filetype-deleteFile').attr('onclick','Shiny.onInputChange("shinyFileBrowserFileDeleted", {  dirName:"'+ linkroot +'", fileName:"'+dFile.name+'"})');
+            if( !dFile.isDir ) delornot =$('<div>' ).addClass('sF-filetype-deleteFile').attr('onclick','Shiny.onInputChange("shinyFileBrowserFileDeleted", { markerid:"'+ markerid +'",  dirName:"'+ linkroot +'", fileName:"'+dFile.name+'"})');
             else $('<div>' );
 
 
