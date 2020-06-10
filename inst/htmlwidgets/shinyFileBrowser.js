@@ -122,7 +122,7 @@ HTMLWidgets.widget({
             else $('<div>' );
 
             var ellipName=dFile.name;
-            if(ellipsized!==0 && dFile.name.length < ellipsized) ellipName = ellipName.substring(ellipName,0,ellipsized)+"...";
+            if(ellipsized!==0 && dFile.name.length > ellipsized) ellipName = ellipName.substring(0,ellipsized)+"...";
 
             return  $('<div>').toggleClass('sF-file', !dFile.isDir).toggleClass('sF-directory', dFile.isDir).append(
                     $('<div>').addClass('sF-file-icon').addClass('sF-filetype-'+dFile.extension)
