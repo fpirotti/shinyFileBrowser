@@ -14,17 +14,15 @@ HTMLWidgets.widget({
 
     if (HTMLWidgets.shinyMode) {
         Shiny.addCustomMessageHandler( 'shinyFileBrowserFileAdded' , function(data) {
-        var el = document.getElementById(data.widgetId);
+        var el = HTMLWidgets.find('#'+elementId+'.shinyFileBrowser');
         if (el) {
           $(el).populateFileChooser( data, true);
         } else {
-          alert();
+          alert('Problema contattare lo sviluppatore');
         }
           //HTMLWidgets.find('.shinyFileBrowser')
 
         });
-          console.log(".....el........");
-          console.log( $(el));
     }
     return {
 
@@ -119,7 +117,7 @@ HTMLWidgets.widget({
 
       returnFileElements: function(dFile, linkroot ){
             var delornot;
-            if( !dFile.isDir ) delornot =$('<div>' ).addClass('sF-filetype-deleteFile').attr('title','Elimina il file').attr('onclick','Shiny.onInputChange("shinyFileBrowserFileDeleted", {  dirName:"'+ linkroot +'", fileName:"'+dFile.name+'"})');
+            if( !dFile.isDir ) delornot =$('<div>' ).addClass('sF-filetype-deleteFile').attr('onclick','Shiny.onInputChange("shinyFileBrowserFileDeleted", {  dirName:"'+ linkroot +'", fileName:"'+dFile.name+'"})');
             else $('<div>' );
 
 
@@ -174,7 +172,7 @@ HTMLWidgets.widget({
             elements.push(header);
             for (var i in parsedFiles.files) {
               var dFile = parsedFiles.files[i];
-              var element = this.returnFileElements(dFile,  data.dirContents.root  );
+              var element = this.returnFileElements(dFile,  data.dirContents.root,  data.dirContents.markerid  );
               elements.push(element);
             }
 
@@ -195,7 +193,7 @@ HTMLWidgets.widget({
               for (var i in newFiles) {
                 var dFile = newFiles[i];
                 modal.find('.sF-fileList').append(
-                  this.returnFileElements(dFile, data.dirContents.root )
+                  this.returnFileElements(dFile, data.dirContents.root,  data.dirContents.markerid )
                 );
               }
             }

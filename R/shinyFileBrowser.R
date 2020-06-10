@@ -98,7 +98,7 @@ shinyFileBrowser <- function(input,
     stop("Devi specificare un path esistente nel server....")
   }
   currentDirContents <- shinyFileBrowser::fileGetter(rootDirServer)
-
+  currentDirContents[['markerid']]<-markerid
   x = list(
     fileUploader = fileUploader,
     dirContents = currentDirContents,
