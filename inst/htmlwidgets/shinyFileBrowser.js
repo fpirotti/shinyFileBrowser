@@ -14,13 +14,12 @@ HTMLWidgets.widget({
 
     if (HTMLWidgets.shinyMode) {
         Shiny.addCustomMessageHandler( 'shinyFileBrowserFileAdded' , function(data) {
-        var el = HTMLWidgets.find('#'+elementId+'.shinyFileBrowser');
+        var el = HTMLWidgets.find('#'+data.elementId+'.shinyFileBrowser');
         if (el) {
-          $(el).populateFileChooser( data, true);
+          el.populateFileChooser( data, true);
         } else {
           alert('Problema contattare lo sviluppatore');
         }
-          //HTMLWidgets.find('.shinyFileBrowser')
 
         });
     }
