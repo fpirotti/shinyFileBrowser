@@ -1,7 +1,7 @@
 library("htmlwidgets")
 library("devtools")
 
-#build()
+build()
 install()
 
 

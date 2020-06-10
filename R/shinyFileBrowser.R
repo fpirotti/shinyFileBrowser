@@ -51,65 +51,71 @@ fileGetter<-function(dir2scan=getwd()){
 
 
 
-#' Create a function that returns a tiny file browser
+#' Create a function that returns a tiny file browser with upload capabilities
 #'
 #'
 #' @family shinyFileBrowser
 #'
 #' @param input A
 #'
-#' @param input A
+#' @param input Input element from shiny
 #'
-#' @param id A
+#' @param elementId Custom elementId
 #'
 #' @param session The session object of the shinyServer call (usually
 #' `session`).
 #'
-#' @param message A
+#' @param width Width of the widget
 #'
-#' @param width A
+#' @param height  Height of the widget
 #'
-#' @param height A
+#' @param rootDirServer The full path to the folder in the server.
 #'
-#' @param elementId A
-#'
-#' @param rootDirServer The default relative path specified given the `defaultRoot`.
-#'
-#' @param rootDirHtml The default relative path specified given the `defaultRoot`.
+#' @param rootDirHtml The relative path to access the file online and download it.
 #'
 #' @param updateFreq The default relative path specified given the `defaultRoot`.
+#'
+#' @param fileUploader Should upload button be created - default TRUE.
 #'
 #' @param ... Arguments to be passed on to [fileGetter()]
 #'
 #' @return A reactive observer that takes care of the server side logic of the
 #' filesystem connection.
 #'
-#' @importFrom shiny observe invalidateLater req observeEvent
+#' @importFrom shiny observe invalidateLater req observeEvent fileInput fileupload
 #' @importFrom fs path
 #' @export
-shinyFileBrowser <- function(input, id, session = getSession(),  message="",
-                             width = NULL, height = NULL,
-                             elementId = paste0("shinyFileBrowser", as.character( as.integer(Sys.time()) ) ),
-                             rootDirServer=NULL, rootDirHtml="/", updateFreq=0, ...) {
+shinyFileBrowser <- function(input,
+                             elementId = paste0("shinyFileBrowser_", as.character( as.integer(Sys.time()) ) ),
+                             session = getSession(),
+                             message="",
+                             width = 300, height = NULL,
+                             rootDirServer=getwd(),
+                             rootDirHtml="/",
+                             markerid=0, updateFreq=0, fileUploader=T, ...) {
 
   if(is.null(rootDirServer) || !dir.exists(rootDirServer) ){
     stop("Devi specificare un path esistente nel server....")
   }
   currentDirContents <- shinyFileBrowser::fileGetter(rootDirServer)
-  clientId <- elementId
 
   x = list(
+    fileUploader = fileUploader,
     dirContents = currentDirContents,
+    rootDirServer=rootDirServer,
+    markerid=markerid,
     rootDirHtml = ifelse( substr(rootDirHtml, nchar(rootDirHtml) , nchar(rootDirHtml) )=="/",
                           rootDirHtml, sprintf("%s/",rootDirHtml ) )
   )
 
 
- htmlwidgets::createWidget(
+
+  htmlwidgets::createWidget(
     name = 'shinyFileBrowser',
     x,
     width = width,
     height = height,
+    elementId = elementId,
     package = 'shinyFileBrowser'
   )
 
@@ -142,6 +148,7 @@ shinyFileBrowserOutput <- function(outputId, width = '100%', height = '400px'){
 rendershinyFileBrowser <- function(expr, env = parent.frame(), quoted = FALSE) {
   if (!quoted) { expr <- substitute(expr) } # force quoted
   htmlwidgets::shinyRenderWidget(expr, shinyFileBrowserOutput, env, quoted = TRUE)
+
 
 }
 

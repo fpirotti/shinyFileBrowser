@@ -20,8 +20,8 @@ library(shinyjs)
 #     })
 
     observe({
-      rootDirServer = "/ms4w/Apache/htdocs/DATI_CONDIVISI/LORAPLAN_MEDIA/UPLOADS/"
-      rootDirHtml= "/DATI_CONDIVISI/LORAPLAN_MEDIA/UPLOADS/"
+      rootDirServer = "/store/ms4w/Apache/htdocs/DATI_CONDIVISI/LORAPLAN_MEDIA/UPLOADS/53677/"
+      rootDirHtml= "/DATI_CONDIVISI/LORAPLAN_MEDIA/UPLOADS/53677/"
 
       insertUI(
         selector = "#DropZoneSuccessSelector",

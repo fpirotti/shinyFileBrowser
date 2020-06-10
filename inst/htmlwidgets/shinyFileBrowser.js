@@ -7,25 +7,34 @@ HTMLWidgets.widget({
   factory: function(el, width, height) {
 
     // TODO: define shared variables for this instance
+    var initialized = false;
+    var rootDirHtml="/";
+    var thisWindow = el;
 
-    rootDirHtml="/";
 
-    if(typeof(Shiny)!=='undefined') {
-        Shiny.addCustomMessageHandler('shinyFileBrowserFileAdded', function(data) {
-          HTMLWidgets.find('.shinyFileBrowser').populateFileChooser( data, true);
-          console.log("qui");  });
+    if (HTMLWidgets.shinyMode) {
+        Shiny.addCustomMessageHandler( 'shinyFileBrowserFileAdded' , function(data) {
+        var el = document.getElementById(data.widgetId);
+        if (el) {
+          $(el).populateFileChooser( data, true);
+        } else {
+          alert();
+        }
+          //HTMLWidgets.find('.shinyFileBrowser')
 
+        });
+          console.log(".....el........");
+          console.log( $(el));
     }
-
     return {
 
       renderValue: function(data) {
 
         // TODO: code to render the widget, e.g.
         //el.innerText = x.message + "----" + x.dir;
-        console.log($(el));
         rootDirHtml=data.rootDirHtml;
         $(el).children().remove();
+
         $(el).append(
           $('<div>').addClass('sF-fileWindow').append(
               $('<div>').addClass('sF-fileList').addClass('sF-detail')
@@ -108,9 +117,9 @@ HTMLWidgets.widget({
 
       },
 
-      returnFileElements: function(dFile, linkroot){
+      returnFileElements: function(dFile, linkroot ){
             var delornot;
-            if( !dFile.isDir ) delornot =$('<div>' ).addClass('sF-filetype-deleteFile').attr('title','Elimina il file').attr('onclick','Shiny.onInputChange("shinyFileBrowserFileDeleted", "'+dFile.name+'")');
+            if( !dFile.isDir ) delornot =$('<div>' ).addClass('sF-filetype-deleteFile').attr('title','Elimina il file').attr('onclick','Shiny.onInputChange("shinyFileBrowserFileDeleted", {  dirName:"'+ linkroot +'", fileName:"'+dFile.name+'"})');
             else $('<div>' );
 
 
@@ -135,38 +144,37 @@ HTMLWidgets.widget({
       },
 
       populateFileChooser: function(data, forceUpdate) {
-
-          var data = this.parseFiles(data.dirContents);
+          var rdata = data;
+          var parsedFiles = this.parseFiles(data.dirContents);
           var modal = $(el); //.data('modal');
-
-          modal.data('dataCache', data);
-
+          console.log(".....adding to........");
+          console.log(modal);
+          modal.data('dataCache', parsedFiles);
+         // modal.data('dataCache', data);
           var currentData = modal.data('currentData');
 
           var newFiles = {};
           if (currentData) {
-            for ( i in data.files) {
-              if (!currentData.files[i]) newFiles[i] = data.files[i];
+            for ( i in parsedFiles.files) {
+              if (!currentData.files[i]) newFiles[i] = parsedFiles.files[i];
             }
           }
           var oldFiles = {};
           if (currentData) {
             for ( i in currentData.files) {
-              if (!data.files[i]) oldFiles[i] = currentData.files[i];
+              if (!parsedFiles.files[i]) oldFiles[i] = currentData.files[i];
             }
           }
 
           if (forceUpdate) {
-
-
             //modal.find('.sF-fileList').append(
             var header = this.returnHeader();
             //);
             var elements = [];
             elements.push(header);
-            for (var i in data.files) {
-              var dFile = data.files[i];
-              var element = this.returnFileElements(dFile);
+            for (var i in parsedFiles.files) {
+              var dFile = parsedFiles.files[i];
+              var element = this.returnFileElements(dFile,  data.dirContents.root  );
               elements.push(element);
             }
 
@@ -174,14 +182,7 @@ HTMLWidgets.widget({
               modal.find('.sF-fileList').children().remove();
               modal.find('.sF-fileList').append(  elements  );
             }
-
             return elements;
-
-
-            //modal.find('.sF-directory').on('dblclick', function() {
-            //  $(this).toggleClass('selected', true);
-            //  openDir($(element), modal, this);
-            //});
           } else {
 
             if (Object.keys(oldFiles).length === 0) {
@@ -193,29 +194,23 @@ HTMLWidgets.widget({
             if (Object.keys(newFiles).length === 0) {
               for (var i in newFiles) {
                 var dFile = newFiles[i];
-
                 modal.find('.sF-fileList').append(
-                  this.returnFileElements(dFile)
+                  this.returnFileElements(dFile, data.dirContents.root )
                 );
               }
             }
           }
 
-          //if($(element).hasClass('shinySave')) {
-          //  setPermission(modal, data.writable);
-          //}
-          //toggleSelectButton(modal);
 
-          modal.data('currentData', data);
+
+          modal.data('currentData', parsedFiles);
           $(modal).trigger('change');
-
-
         }
-
-
     };
   }
 });
+
+
 
 
 
