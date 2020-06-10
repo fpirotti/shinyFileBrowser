@@ -106,6 +106,7 @@ shinyFileBrowser <- function(input,
     dirContents = currentDirContents,
     rootDirServer=rootDirServer,
     markerid=markerid,
+    elementId=elementId,
     ellipsized=ellipsized,
     rootDirHtml = ifelse( substr(rootDirHtml, nchar(rootDirHtml) , nchar(rootDirHtml) )=="/",
                           rootDirHtml, sprintf("%s/",rootDirHtml ) )
