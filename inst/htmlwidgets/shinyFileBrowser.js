@@ -184,6 +184,10 @@ HTMLWidgets.widget({
               modal.find('.sF-fileList').children().remove();
               modal.find('.sF-fileList').append(  elements  );
             }
+
+            console.log(elementId);
+            Shiny.setInputValue("shinyFileBrowserRendered", { elementId:elementId }, {priority: "event"});
+
             return elements;
           } else {
 
@@ -204,6 +208,7 @@ HTMLWidgets.widget({
           }
           modal.data('currentData', parsedFiles);
           $(modal).trigger('change');
+          console.log(elementId);
           Shiny.setInputValue("shinyFileBrowserRendered", { elementId:elementId }, {priority: "event"});
         }
     };
