@@ -146,8 +146,8 @@ HTMLWidgets.widget({
           var rdata = data;
           var parsedFiles = this.parseFiles(data.dirContents);
           var modal = $(el); //.data('modal');
-          console.log(".....adding to........");
-          console.log(modal);
+
+
           modal.data('dataCache', parsedFiles);
          // modal.data('dataCache', data);
           var currentData = modal.data('currentData');
@@ -173,7 +173,7 @@ HTMLWidgets.widget({
             elements.push(header);
             for (var i in parsedFiles.files) {
               var dFile = parsedFiles.files[i];
-              var element = this.returnFileElements(dFile,  data.dirContents.root,  data.dirContents.markerid  );
+              var element = this.returnFileElements(dFile,  rdata.dirContents.root,  rdata.markerid  );
               elements.push(element);
             }
 
@@ -194,7 +194,7 @@ HTMLWidgets.widget({
               for (var i in newFiles) {
                 var dFile = newFiles[i];
                 modal.find('.sF-fileList').append(
-                  this.returnFileElements(dFile, data.dirContents.root,  data.dirContents.markerid )
+                  this.returnFileElements(dFile, rdata.dirContents.root,  rdata.dirContents.markerid )
                 );
               }
             }
